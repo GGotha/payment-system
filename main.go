@@ -1,34 +1,24 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
+	"log"
 
-	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
 )
 
-type album struct {
-	Id     string  `json:"id"`
-	Title  string  `json:"title"`
-	Artist string  `json:"artist"`
-	Price  float64 `json:"price"`
-}
-
-var albums = []album{
-	{Id: "1", Title: "teste", Artist: "Mateus", Price: 56.00},
-	{Id: "2", Title: "teste2", Artist: "João", Price: 56.00},
-	{Id: "3", Title: "teste3", Artist: "Pires", Price: 56.00},
-}
-
-func getAlbums(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, albums)
-}
-
 func main() {
-	router := gin.Default()
-	router.GET("/albums", getAlbums)
+	log.Default()
 
-	router.Run("localhost:3333")
+	app := fiber.New(fiber.Config{
+		AppName: "Payment System v1",
+	})
 
-	fmt.Println("Hello world")
+	app.Route("/v1", func(api fiber.Router) {
+		api.Get("/user", func(c *fiber.Ctx) error {
+			return c.Status(fiber.StatusUnauthorized).
+				JSON(fiber.Map{"status": "error", "message": "User doesn't exists", "data": nil})
+		}).Name("foo") // /test/foo (name: test.foo)
+	}, "test.")
+
+	log.Fatal(app.Listen(":3333"))
 }
