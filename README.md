@@ -1,3 +1,6 @@
 ## Payment System
 
-#### Project created to learn more about Golang
+
+```
+gin --appPort 8080 --port 3333
+```
